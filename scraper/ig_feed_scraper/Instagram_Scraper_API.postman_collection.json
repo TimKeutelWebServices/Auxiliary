@@ -1,0 +1,123 @@
+{
+  "info": {
+    "name": "Instagram Feed Scraper API",
+    "description": "API to trigger Instagram feed scraping using Instaloader",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health & Info",
+      "item": [
+        {
+          "name": "Root",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Root endpoint - returns API information and available endpoints"
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Health check endpoint"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Scraping",
+      "item": [
+        {
+          "name": "Scrape Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile_name\": \"instagram\",\n  \"max_posts\": 10,\n  \"output_dir\": \"downloads\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/scrape/profile",
+              "host": ["{{base_url}}"],
+              "path": ["scrape", "profile"]
+            },
+            "description": "Scrape posts from a specific Instagram profile (works without login for public profiles)"
+          },
+          "response": []
+        },
+        {
+          "name": "Scrape Hashtag",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hashtag\": \"photography\",\n  \"max_posts\": 10,\n  \"output_dir\": \"downloads\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/scrape/hashtag",
+              "host": ["{{base_url}}"],
+              "path": ["scrape", "hashtag"]
+            },
+            "description": "Scrape posts from a specific hashtag (works without login)"
+          },
+          "response": []
+        },
+        {
+          "name": "Scrape Own Feed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"max_posts\": 10,\n  \"output_dir\": \"downloads\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/scrape/feed",
+              "host": ["{{base_url}}"],
+              "path": ["scrape", "feed"]
+            },
+            "description": "Scrape your own Instagram feed (requires IG_USERNAME and IG_PASSWORD in .env)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ]
+}

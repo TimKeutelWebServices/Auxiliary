@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"name": "auxiliary",
+			"path": "../auxiliary"
+		},
+		{
+			"name": "scraper",
+			"path": "../scraper"
+		},
+		{
+			"name": "root",
+			"path": "../"
+		},
+	],
+	"files.associations": {
+		"*.env.*": "env"
+	},
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "tkws_auxiliary"
+	}
+}
