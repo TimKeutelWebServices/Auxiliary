@@ -2,22 +2,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "FastAPI Server",
+            "name": "IG Feed Scraper — Script",
             "type": "debugpy",
             "request": "launch",
-            "module": "uvicorn",
-            "args": [
-                "api:app",
-                "--reload",
-                "--host",
-                "0.0.0.0",
-                "--port",
-                "8000"
-            ],
+            "program": "${workspaceFolder:scraper}/ig_feed/ig_scraper.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder:scraper}/ig_feed_scraper/.env",
-            "cwd": "${workspaceFolder:scraper}/ig_feed_scraper",
-            "python": "${workspaceFolder:scraper}/ig_feed_scraper/.venv/Scripts/python.exe",
+            "envFile": "${workspaceFolder:scraper}/ig_feed/.env",
+            "cwd": "${workspaceFolder:scraper}/ig_feed",
+            "python": "${workspaceFolder:scraper}/.venv/Scripts/python.exe",
+            "justMyCode": false
+        },
+        {
+            "name": "Google Business Review — Sync",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder:scraper}/google_business_review/src/google_business_review/main.py",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder:scraper}/google_business_review/.env",
+            "cwd": "${workspaceFolder:scraper}/google_business_review",
+            "python": "${workspaceFolder:scraper}/.venv/Scripts/python.exe",
             "justMyCode": false
         }
     ]

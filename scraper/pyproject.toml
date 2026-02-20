@@ -1,0 +1,48 @@
+[project]
+name = "google-business-review"
+version = "0.1.0"
+description = "Fetch Google Business reviews and opening hours, store in Strapi"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "TKWS" }]
+
+dependencies = [
+    "outscraper",
+    "requests",
+    "python-dotenv",
+    "instaloader",
+    "fastapi",
+    "uvicorn",
+    "browser-cookie3",
+]
+
+[project.scripts]
+gbr-sync = "google_business_review.main:main"
+gbr-schema = "google_business_review.generate_schema:main"
+
+[build-system]
+requires = ["setuptools>=75.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.setuptools.packages.find]
+where = ["google_business_review/src"]
+include = ["google_business_review*"]
+

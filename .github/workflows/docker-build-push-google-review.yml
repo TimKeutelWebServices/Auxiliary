@@ -1,18 +1,18 @@
-name: Build and Push Docker Image
+name: Build and Push IG Feed Scraper
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'scraper/google_business_review/**'
+      - '.github/workflows/**'
     tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - main
+      - 'google-review-v*'
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/ig-feed-scraper
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/google-review-scraper
 
 jobs:
   build-and-push:
@@ -46,10 +46,11 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
       
       - name: Build and push Docker image
+        id: build-push
         uses: docker/build-push-action@v5
         with:
-          context: ./scraper/ig_feed_scraper
-          file: ./scraper/ig_feed_scraper/Dockerfile
+          context: ./scraper/google_business_review
+          file: ./scraper/google_business_review/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

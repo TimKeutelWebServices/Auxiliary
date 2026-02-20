@@ -1,0 +1,20 @@
+services:
+  google_business_review:
+    build:
+      context: ..
+      dockerfile: google_business_review/Dockerfile
+    container_name: google_business_review
+    env_file:
+      - .env
+    restart: "no"
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-run.gbr.schedule: "0 3 * * *"
+      ofelia.job-run.gbr.container: "google_business_review"
+
+  ofelia:
+    image: mcuadros/ofelia:latest
+    command: daemon --docker
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

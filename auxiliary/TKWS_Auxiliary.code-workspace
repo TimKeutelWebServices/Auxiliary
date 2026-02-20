@@ -17,6 +17,11 @@
 		"*.env.*": "env"
 	},
 	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "tkws_auxiliary"
-	}
+		"liveServer.settings.multiRootWorkspaceName": "tkws_auxiliary",
+		"files.exclude": {
+			"auxiliary": true,
+			"scraper": true,
+			"*.egg-info": true,
+		}
+	},
 }

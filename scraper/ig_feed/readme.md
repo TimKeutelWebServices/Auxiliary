@@ -1,0 +1,1 @@
+Removed all code cause IG scrapper is not working, need to find a new solution.
