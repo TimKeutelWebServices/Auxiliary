@@ -21,7 +21,7 @@ def fetch_reviews(
     
     # Prepare API parameters
     params = {
-        "reviews_limit": 100,
+        "reviews_limit": 20,
     }
     
     # Add cutoff parameter if timestamp is provided
