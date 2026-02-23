@@ -18,7 +18,7 @@ ENV PATH="/root/.local/bin:${PATH}"
 
 COPY pyproject.toml /app/
 COPY core/src /app/core/src
-COPY google_business_review/src /app/google_business_review/src
+COPY google_business_opening_hours/src /app/google_business_opening_hours/src
 
 RUN uv pip install --system .
 
@@ -29,4 +29,4 @@ COPY --from=builder /app /app
 
 USER appuser
 
-CMD ["python", "-m", "google_business_review.main"]
+CMD ["python", "-m", "google_business_opening_hours.main"]

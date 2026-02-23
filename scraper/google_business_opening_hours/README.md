@@ -1,13 +1,12 @@
-# Google Business Review Sync
+# Google Business Opening Hours Sync
 
-Fetch reviews from a Google place ID using Outscraper and store them in Strapi.
+Fetch opening hours from a Google place ID using Outscraper and store them in Strapi.
 
 ## Requirements
 
 - Python 3.11+
 - Outscraper API key
 - Strapi v4 REST API token
-- Virtual environment at `../.venv` (shared with parent scraper project)
 
 ## Environment
 
@@ -17,21 +16,21 @@ Create a `.env` file (see `.env.example`) and set:
 - GOOGLE_PLACE_ID
 - STRAPI_URL
 - STRAPI_TOKEN
-- STRAPI_REVIEWS_COLLECTION
+- STRAPI_OPENINGHOURS_COLLECTION
 
 ## Setup
 
 1. **Generate Strapi schemas**:
    ```bash
-   uv run gbr-schema
+   uv run gboh-schema
    ```
    Copy the generated files to your Strapi project:
-   - `generated_strapi_types/review/*` → `<strapi>/src/api/review/`
+   - `generated_strapi_types/openinghour/*` → `<strapi>/src/api/openinghour/`
 
 2. **Run locally**:
    ```bash
    uv pip install -e .
-   uv run gbr-sync
+   uv run gboh-sync
    ```
 
 ## Docker

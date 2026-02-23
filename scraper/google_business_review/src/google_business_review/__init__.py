@@ -1,1 +1,1 @@
-"""Google Business Review sync."""
+"""Google Business Review sync — reviews only."""

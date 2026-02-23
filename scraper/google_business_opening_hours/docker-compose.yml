@@ -1,0 +1,20 @@
+services:
+  google_business_opening_hours:
+    build:
+      context: ..
+      dockerfile: google_business_opening_hours/Dockerfile
+    container_name: google_business_opening_hours
+    env_file:
+      - .env
+    restart: "no"
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-run.gboh.schedule: "0 3 * * *"
+      ofelia.job-run.gboh.container: "google_business_opening_hours"
+
+  ofelia:
+    image: mcuadros/ofelia:latest
+    command: daemon --docker
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

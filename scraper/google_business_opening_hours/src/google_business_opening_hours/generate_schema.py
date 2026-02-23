@@ -1,18 +1,18 @@
 #!/usr/bin/env python
-"""Generate Strapi schema for the reviews collection."""
+"""Generate Strapi schema for the opening hours collection."""
 
 import json
 from pathlib import Path
 
 
-REVIEW_SCHEMA = {
+OPENINGHOURS_SCHEMA = {
     "kind": "collectionType",
-    "collectionName": "reviews",
+    "collectionName": "openinghours",
     "info": {
-        "singularName": "review",
-        "pluralName": "reviews",
-        "displayName": "Google Business Review",
-        "description": "Reviews from Google Business Profile",
+        "singularName": "openinghour",
+        "pluralName": "openinghours",
+        "displayName": "Google Business Opening Hours",
+        "description": "Opening hours from Google Business Profile",
     },
     "options": {
         "draftAndPublish": False,
@@ -22,26 +22,10 @@ REVIEW_SCHEMA = {
         "place_id": {
             "type": "string",
             "required": True,
-        },
-        "review_id": {
-            "type": "string",
-            "required": True,
             "unique": True,
         },
-        "author_name": {
-            "type": "string",
-        },
-        "rating": {
-            "type": "integer",
-        },
-        "text": {
-            "type": "text",
-        },
-        "review_url": {
-            "type": "string",
-        },
-        "review_date": {
-            "type": "datetime",
+        "opening_hours": {
+            "type": "json",
         },
         "raw": {
             "type": "json",
@@ -111,16 +95,16 @@ def create_api_structure(base_path: Path, name: str, schema: dict) -> None:
 
 
 def main() -> None:
-    """Generate Strapi API structure for reviews collection."""
+    """Generate Strapi API structure for opening hours collection."""
     script_dir = Path(__file__).parent.parent.parent
     base_path = script_dir / "generated_strapi_types"
     base_path.mkdir(exist_ok=True)
 
     print("Generating Strapi API structure …\n")
-    create_api_structure(base_path, "review", REVIEW_SCHEMA)
+    create_api_structure(base_path, "openinghour", OPENINGHOURS_SCHEMA)
 
     print("\nTo use in Strapi:")
-    print("  cp -r generated_strapi_types/review/* <strapi>/src/api/review/")
+    print("  cp -r generated_strapi_types/openinghour/* <strapi>/src/api/openinghour/")
     print("  Restart Strapi.")
 
 

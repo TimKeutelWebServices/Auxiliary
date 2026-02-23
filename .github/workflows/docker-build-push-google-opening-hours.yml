@@ -1,19 +1,19 @@
-name: Build and Push Google Review Scraper
+name: Build and Push Google Opening Hours Scraper
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'scraper/google_business_review/**'
+      - 'scraper/google_business_opening_hours/**'
       - 'scraper/core/**'
-      - '.github/workflows/docker-build-push-google-review.yml'
+      - '.github/workflows/docker-build-push-google-opening-hours.yml'
     tags:
-      - 'google-review-v*'
+      - 'google-opening-hours-v*'
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/google-review-scraper
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/google-opening-hours-scraper
 
 jobs:
   build-and-push:
@@ -51,7 +51,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./scraper
-          file: ./scraper/google_business_review/Dockerfile
+          file: ./scraper/google_business_opening_hours/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

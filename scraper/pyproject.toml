@@ -1,7 +1,7 @@
 [project]
-name = "google-business-review"
-version = "0.1.0"
-description = "Fetch Google Business reviews and opening hours, store in Strapi"
+name = "google-business-scraper"
+version = "0.2.0"
+description = "Scrapers for Google Business reviews and opening hours, stored in Strapi"
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "TKWS" }]
@@ -19,6 +19,8 @@ dependencies = [
 [project.scripts]
 gbr-sync = "google_business_review.main:main"
 gbr-schema = "google_business_review.generate_schema:main"
+gboh-sync = "google_business_opening_hours.main:main"
+gboh-schema = "google_business_opening_hours.generate_schema:main"
 
 [build-system]
 requires = ["setuptools>=75.0", "wheel"]
@@ -43,6 +45,6 @@ target-version = "py312"
 select = ["E", "F", "I", "W"]
 
 [tool.setuptools.packages.find]
-where = ["google_business_review/src"]
-include = ["google_business_review*"]
+where = ["core/src", "google_business_review/src", "google_business_opening_hours/src"]
+include = ["core*", "google_business_review*", "google_business_opening_hours*"]
 
