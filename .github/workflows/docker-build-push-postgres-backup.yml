@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'scraper/postgres_azure_backup/**'
+      - 'utils/postgres_azure_backup/**'
       - '.github/workflows/docker-build-push-postgres-backup.yml'
     tags:
       - 'postgres-backup-v*'
