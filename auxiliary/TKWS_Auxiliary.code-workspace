@@ -9,9 +9,13 @@
 			"path": "../scraper"
 		},
 		{
+			"name": "utils",
+			"path": "../utils"
+		},
+		{
 			"name": "root",
 			"path": "../"
-		},
+		}
 	],
 	"files.associations": {
 		"*.env.*": "env"
@@ -21,7 +25,11 @@
 		"files.exclude": {
 			"auxiliary": true,
 			"scraper": true,
+			"utils": true,
 			"*.egg-info": true,
+		},
+		"chat.tools.terminal.autoApprove": {
+			"docker build": true
 		}
 	},
 }

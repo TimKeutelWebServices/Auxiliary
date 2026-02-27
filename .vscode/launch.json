@@ -2,17 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "IG Feed Scraper — Script",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder:scraper}/ig_feed/ig_scraper.py",
-            "console": "integratedTerminal",
-            "envFile": "${workspaceFolder:scraper}/ig_feed/.env",
-            "cwd": "${workspaceFolder:scraper}/ig_feed",
-            "python": "${workspaceFolder:scraper}/.venv/Scripts/python.exe",
-            "justMyCode": false
-        },
-        {
             "name": "Google Business Review — Sync",
             "type": "debugpy",
             "request": "launch",
@@ -21,6 +10,17 @@
             "envFile": "${workspaceFolder:scraper}/google_business_review/.env",
             "cwd": "${workspaceFolder:scraper}/google_business_review",
             "python": "${workspaceFolder:scraper}/.venv/Scripts/python.exe",
+            "justMyCode": false
+        },
+        {
+            "name": "Postgres Azure Backup",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder:utils}/postgres_azure_backup/src/postgres_azure_backup/__main__.py",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder:utils}/postgres_azure_backup/.env",
+            "cwd": "${workspaceFolder:utils}/postgres_azure_backup",
+            "python": "${workspaceFolder:utils}/.venv/Scripts/python.exe",
             "justMyCode": false
         }
     ]

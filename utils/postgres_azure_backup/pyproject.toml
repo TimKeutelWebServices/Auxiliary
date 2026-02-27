@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "postgres-azure-backup"
+version = "0.1.0"
+description = "PostgreSQL backup service with Azure Storage integration"
+requires-python = ">=3.11"
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+license = "MIT"
+
+dependencies = [
+    "psycopg2-binary>=2.9.9",
+    "azure-storage-blob>=12.19.0",
+    "python-dotenv>=1.0.0",
+]
+
+[tool.setuptools]
+packages = ["postgres_azure_backup"]
+package-dir = {"" = "src"}
