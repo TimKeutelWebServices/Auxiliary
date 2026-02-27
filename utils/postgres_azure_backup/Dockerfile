@@ -29,7 +29,6 @@ COPY --from=builder /root/.local /home/backupuser/.local
 
 # Copy application code
 COPY --from=builder /app/src /app/src
-COPY --chown=backupuser:backupuser .env.example /app/.env.example
 
 WORKDIR /app
 
