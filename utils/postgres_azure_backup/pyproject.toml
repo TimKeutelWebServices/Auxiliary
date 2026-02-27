@@ -14,10 +14,9 @@ license = "MIT"
 
 dependencies = [
     "psycopg2-binary>=2.9.9",
-    "azure-storage-blob>=12.19.0",
+    "azure-storage-blob>=12.19.0,<13.0.0",
     "python-dotenv>=1.0.0",
 ]
 
 [tool.setuptools]
-packages = ["postgres_azure_backup"]
-package-dir = {"" = "src"}
+py-modules = []

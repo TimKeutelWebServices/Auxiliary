@@ -11,12 +11,15 @@ WORKDIR /app
 # Stage 1: Builder
 FROM base AS builder
 
-# Copy project files
-COPY pyproject.toml ./
-COPY src ./src
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Install dependencies
-RUN pip install --no-cache-dir --user -e .
+# Copy project files and install dependencies
+WORKDIR /app
+
+COPY pyproject.toml ./
+RUN pip install --no-cache-dir .
 
 # Stage 2: Runtime
 FROM base AS runtime
@@ -24,18 +27,21 @@ FROM base AS runtime
 # Create non-root user for security
 RUN useradd -m -u 1001 backupuser
 
-# Copy installed packages from builder
-COPY --from=builder /root/.local /home/backupuser/.local
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
 
 # Copy application code
-COPY --from=builder /app/src /app/src
+COPY backup_service.py /app/backup_service.py
 
 WORKDIR /app
 
 # Set Python path
-ENV PATH=/home/backupuser/.local/bin:$PATH \
+ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
+
+# Change ownership to backupuser
+RUN chown -R backupuser:backupuser /app /opt/venv
 
 USER backupuser
 
@@ -44,4 +50,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import sys; sys.exit(0)" || exit 1
 
 # Run the backup service
-CMD ["python", "-m", "postgres_azure_backup.backup_service"]
+CMD ["python", "backup_service.py"]

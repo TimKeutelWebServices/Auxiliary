@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from azure.storage.blob import BlobClient, StandardBlobTier
+from azure.storage.blob import BlobClient, ContainerClient, StandardBlobTier
 from dotenv import load_dotenv
 
 # Configure logging - only errors and key metrics
@@ -170,6 +170,19 @@ def upload_to_azure(
     start_time = time.time()
     
     try:
+        # Ensure container exists
+        container_client = ContainerClient.from_connection_string(
+            connection_string,
+            container_name=container_name
+        )
+        
+        try:
+            container_client.create_container()
+            info_logger.info(f"Container '{container_name}' created")
+        except Exception:
+            # Container already exists, which is fine
+            pass
+        
         with open(backup_path, 'rb') as data:
             blob_client = BlobClient.from_connection_string(
                 connection_string,
