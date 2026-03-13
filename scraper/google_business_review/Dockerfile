@@ -29,4 +29,6 @@ COPY --from=builder /app /app
 
 USER appuser
 
-CMD ["python", "-m", "google_business_review.main"]
+EXPOSE 8000
+
+CMD ["uvicorn", "google_business_review.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -9,7 +9,7 @@
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder:scraper}/google_business_review/.env",
             "cwd": "${workspaceFolder:scraper}/google_business_review",
-            "python": "${workspaceFolder:scraper}/.venv/Scripts/python.exe",
+            "python": "${workspaceFolder:scraper}/.venv/bin/python",
             "justMyCode": false
         },
         {
@@ -20,7 +20,7 @@
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder:utils}/postgres_azure_backup/.env",
             "cwd": "${workspaceFolder:utils}/postgres_azure_backup",
-            "python": "${workspaceFolder:utils}/.venv/Scripts/python.exe",
+            "python": "${command:python.interpreterPath}",
             "justMyCode": false
         }
     ]

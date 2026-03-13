@@ -29,11 +29,11 @@ def get_review_cutoff_unix() -> int:
     return int(os.getenv("REVIEWS_CUTOFF_UNIX", "0"))
 
 
-def store_review(raw: dict) -> None:
-    """Push one review into Strapi."""
+def store_review(raw: dict) -> str:
+    """Push one review into Strapi and return storage outcome."""
     review_id = str(raw.get("review_id", raw.get("review_link", "")))
     if not review_id:
-        return
+        return "ignored"
 
     payload = {
         "data": {
@@ -51,5 +51,12 @@ def store_review(raw: dict) -> None:
     resp = post(REVIEWS_COLLECTION, payload)
     if resp.status_code == 201:
         print(f"  ✓ {review_id[:40]}")
+        return "stored"
     elif resp.status_code == 400:
         print(f"  ↳ skip {review_id[:40]}")
+        return "skipped"
+
+    raise RuntimeError(
+        f"Strapi create failed for review {review_id[:40]}: "
+        f"status={resp.status_code}, body={resp.text}"
+    )

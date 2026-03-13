@@ -1,0 +1,120 @@
+{
+  "info": {
+    "_postman_id": "c15d2c29-16c6-4f1f-9c0f-d7ea31a3da47",
+    "name": "Google Business Review Sync API",
+    "description": "Collection for triggering review sync and checking health metadata.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        },
+        "description": "Returns service status and latest run metadata."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Health returns 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const json = pm.response.json();",
+              "pm.test(\"Health response has status and latest_run\", function () {",
+              "  pm.expect(json).to.have.property(\"status\");",
+              "  pm.expect(json).to.have.property(\"latest_run\");",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Trigger Review Sync",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/sync/reviews",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sync",
+            "reviews"
+          ]
+        },
+        "description": "Triggers one sync run and returns execution metadata."
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Sync returns expected status code\", function () {",
+              "  pm.expect([200, 409, 500]).to.include(pm.response.code);",
+              "});",
+              "",
+              "const json = pm.response.json();",
+              "pm.test(\"Sync response contains success + status\", function () {",
+              "  pm.expect(json).to.have.property(\"success\");",
+              "  pm.expect(json).to.have.property(\"status\");",
+              "});",
+              "",
+              "if (pm.response.code === 200) {",
+              "  pm.test(\"Successful sync has fetched_reviews\", function () {",
+              "    pm.expect(json).to.have.property(\"fetched_reviews\");",
+              "  });",
+              "}"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
-# Google Business Review Sync
+# Google Business Review Sync API
 
-Fetch reviews from a Google place ID using Outscraper and store them in Strapi.
+Fetch reviews from a Google place ID using Outscraper and store them in Strapi via a FastAPI service.
 
 ## Requirements
 
@@ -31,8 +31,15 @@ Create a `.env` file (see `.env.example`) and set:
 2. **Run locally**:
    ```bash
    uv pip install -e .
-   uv run gbr-sync
+    uv run uvicorn google_business_review.main:app --host 0.0.0.0 --port 8000
    ```
+
+## Endpoints
+
+- `POST /sync/reviews` triggers one sync run.
+   Returns execution metadata including success/error status, counts, and data source.
+- `GET /health` returns service health plus metadata from the latest run.
+   If the latest run failed, health status is `error` and the run error is included.
 
 ## Docker
 
@@ -40,5 +47,4 @@ Create a `.env` file (see `.env.example`) and set:
 docker compose up -d --build
 ```
 
-The `ofelia` service runs as a daemon and triggers the job at 3:00 every morning.
-The app container is created and stopped; Ofelia starts it on schedule and it exits when done.
+The API is available on `http://localhost:8000`.
