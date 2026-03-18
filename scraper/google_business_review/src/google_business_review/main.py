@@ -1,6 +1,7 @@
 """FastAPI service to sync Google Business reviews into Strapi."""
 
 from datetime import datetime, timezone
+import logging
 import os
 from threading import Lock
 from typing import Any
@@ -13,6 +14,13 @@ import google_business_review.outscraper as outscraper
 import google_business_review.strapi as strapi
 
 load_dotenv()
+
+# Skip logging for health endpoint
+class _SkipHealthCheckFilter(logging.Filter):
+    def filter(self, record):
+        return "/health" not in record.getMessage()
+
+logging.getLogger("uvicorn.access").addFilter(_SkipHealthCheckFilter())
 
 app = FastAPI(title="Google Business Review Sync", version="0.1.0")
 _RUN_LOCK = Lock()
