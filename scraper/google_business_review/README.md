@@ -18,6 +18,7 @@ Create a `.env` file (see `.env.example`) and set:
 - STRAPI_URL
 - STRAPI_TOKEN
 - STRAPI_REVIEWS_COLLECTION
+- REVIEW_SYNC_CRON (standard crontab format, e.g. `*/15 * * * *`)
 
 ## Setup
 
@@ -34,11 +35,13 @@ Create a `.env` file (see `.env.example`) and set:
     uv run uvicorn google_business_review.main:app --host 0.0.0.0 --port 8000
    ```
 
-## Endpoints
+## Scheduler and Endpoint
 
-- `POST /sync/reviews` triggers one sync run.
-   Returns execution metadata including success/error status, counts, and data source.
-- `GET /health` returns service health plus metadata from the latest run.
+Review sync runs automatically based on `REVIEW_SYNC_CRON`.
+One sync run is also executed immediately on API startup.
+The cron expression is validated at startup, and the service fails fast if invalid.
+
+- `GET /health` returns service health plus scheduler configuration and metadata from the latest run.
    If the latest run failed, health status is `error` and the run error is included.
 
 ## Docker

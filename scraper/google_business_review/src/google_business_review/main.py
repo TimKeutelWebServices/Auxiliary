@@ -6,9 +6,10 @@ import os
 from threading import Lock
 from typing import Any
 
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 
 import google_business_review.outscraper as outscraper
 import google_business_review.strapi as strapi
@@ -24,6 +25,7 @@ logging.getLogger("uvicorn.access").addFilter(_SkipHealthCheckFilter())
 
 app = FastAPI(title="Google Business Review Sync", version="0.1.0")
 _RUN_LOCK = Lock()
+_SCHEDULER: BackgroundScheduler | None = None
 _LATEST_RUN: dict[str, Any] = {
     "status": "never_run",
     "success": None,
@@ -39,6 +41,8 @@ _LATEST_RUN: dict[str, Any] = {
     "ignored_reviews": 0,
     "error": None,
 }
+
+_SYNC_CRON_ENV = "REVIEW_SYNC_CRON"
 
 
 def _sync_reviews() -> dict[str, Any]:
@@ -101,18 +105,13 @@ def _sync_reviews() -> dict[str, Any]:
         }
 
 
-@app.post("/sync/reviews")
-def trigger_review_sync() -> JSONResponse:
-    """Run one sync job and return execution metadata."""
+def _run_sync_job() -> None:
+    """Run one sync job if another run is not already in progress."""
     if not _RUN_LOCK.acquire(blocking=False):
-        return JSONResponse(
-            status_code=409,
-            content={
-                "status": "error",
-                "success": False,
-                "error": "A sync run is already in progress.",
-            },
+        logging.getLogger(__name__).warning(
+            "Skipping scheduled sync because a sync run is already in progress."
         )
+        return
 
     global _LATEST_RUN
     try:
@@ -121,8 +120,53 @@ def trigger_review_sync() -> JSONResponse:
     finally:
         _RUN_LOCK.release()
 
-    status_code = 200 if result["success"] else 500
-    return JSONResponse(status_code=status_code, content=result)
+
+def _build_scheduler() -> BackgroundScheduler:
+    """Create a cron scheduler using environment-based cron configuration."""
+    cron_expression = os.getenv(_SYNC_CRON_ENV, "0 * * * *").strip()
+
+    try:
+        trigger = CronTrigger.from_crontab(cron_expression)
+    except ValueError as exc:
+        raise RuntimeError(
+            f"Invalid cron expression '{cron_expression}' from {_SYNC_CRON_ENV}."
+        ) from exc
+
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(
+        _run_sync_job,
+        trigger=trigger,
+        id="google_business_review_sync",
+        replace_existing=True,
+        coalesce=True,
+        max_instances=1,
+        misfire_grace_time=300,
+    )
+
+    logging.getLogger(__name__).info(
+        "Scheduled review sync configured with cron '%s'.",
+        cron_expression,
+    )
+    return scheduler
+
+
+@app.on_event("startup")
+def start_scheduler() -> None:
+    """Run an initial sync and start the cron scheduler when the API starts."""
+    global _SCHEDULER
+    _run_sync_job()
+    scheduler = _build_scheduler()
+    scheduler.start()
+    _SCHEDULER = scheduler
+
+
+@app.on_event("shutdown")
+def stop_scheduler() -> None:
+    """Shutdown the cron scheduler when the API stops."""
+    global _SCHEDULER
+    if _SCHEDULER is not None:
+        _SCHEDULER.shutdown(wait=False)
+        _SCHEDULER = None
 
 
 @app.get("/health")
@@ -131,8 +175,14 @@ def health() -> dict[str, Any]:
     status = "ok"
     if _LATEST_RUN["status"] == "error":
         status = "error"
+
+    cron_expression = os.getenv(_SYNC_CRON_ENV, "0 * * * *")
+
     return {
         "status": status,
+        "scheduler": {
+            "cron": cron_expression,
+        },
         "latest_run": _LATEST_RUN,
     }
 
